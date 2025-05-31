@@ -2,6 +2,13 @@
 
 @section('content')
 <div class="container py-4">
+    {{-- Back Button --}}
+    <div class="mb-4">
+        <button class="btn btn-outline-secondary" onclick="window.history.back()">
+            🔙 Back
+        </button>
+    </div>
+
     {{-- Post Card --}}
     <div class="card mb-5 shadow-sm border-0">
         <img src="{{ asset('storage/' . $post->image) }}" class="card-img-top rounded-top" style="max-height: 100px; max-width:100px;" alt="{{ $post->title }}">
@@ -47,10 +54,19 @@
                 <textarea name="message" placeholder="Your Comment" class="form-control" rows="3" required></textarea>
             </div>
             <button type="submit" class="btn btn-success">Post Comment</button>
-            <div id="comment-success" class="alert alert-success mt-3 d-none">
+        </form>
+    </div>
+</div>
+
+{{-- Toast Notification --}}
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
+    <div id="toastSuccess" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
                 ✅ Comment added successfully!
             </div>
-        </form>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
     </div>
 </div>
 @endsection
@@ -89,11 +105,12 @@ document.getElementById('comment-form').addEventListener('submit', async functio
         `;
 
         document.getElementById('comments').insertAdjacentHTML('afterbegin', commentHtml);
-        document.getElementById('comment-success').classList.remove('d-none');
         form.reset();
-        setTimeout(() => {
-            document.getElementById('comment-success').classList.add('d-none');
-        }, 3000);
+
+        // Show toast
+        const toastElement = document.getElementById('toastSuccess');
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
     }
 });
 </script>
